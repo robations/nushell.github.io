@@ -165,34 +165,39 @@ The `get` command can go one step further and take a path to data deeper in the 
 
 In addition to selecting data from a table, we can also update what the table has. We may want to add new columns, or edit the contents of a cell. In Nu, rather than editing in place, each of the commands in the section will return a new table in the pipeline.
 
-### Adding a new column
+### Inserting a new column
 
-We can use the `add` command to add a new column to the table. Let's look at an example:
+We can use the `insert` command to add a new column to the table. Let's look at an example:
 
 ```
 > open rustfmt.toml
-─────────┬──────
- edition │ 2018 
-─────────┴──────
+───┬─────────
+ # │ edition 
+───┼─────────
+ 0 │    2018 
+───┴─────────
 ```
 
-Let's add an column called "next_edition" with the value 2021:
+Let's insert an column called "next_edition" with the value 2021:
 
 ```
 > open rustfmt.toml | insert next_edition 2021
-──────────────┬──────
- edition      │ 2018 
- next_edition │ 2021 
-──────────────┴──────
+───┬─────────┬──────────────
+ # │ edition │ next_edition 
+───┼─────────┼──────────────
+ 0 │    2018 │         2021 
+───┴─────────┴──────────────
 ```
 
 Notice that we if open the original file, the contents have stayed the same:
 
 ```
 > open rustfmt.toml
-─────────┬──────
- edition │ 2018 
-─────────┴──────
+───┬─────────
+ # │ edition 
+───┼─────────
+ 0 │    2018 
+───┴─────────
 ```
 
 Changes in Nu are functional changes, meaning that they work on the values themselves rather than trying to cause a permanent change. This lets us do many different types of work in our 
@@ -201,10 +206,11 @@ pipeline until we're ready to write out the result with any changes we'd like if
 ```
 > open rustfmt.toml | insert next_edition 2021 | save rustfmt2.toml
 > open rustfmt2.toml
-──────────────┬──────
- edition      │ 2018 
- next_edition │ 2021 
-──────────────┴──────
+───┬─────────┬──────────────
+ # │ edition │ next_edition 
+───┼─────────┼──────────────
+ 0 │    2018 │         2021 
+───┴─────────┴──────────────
 ```
 
 ### Updating a column
@@ -213,18 +219,22 @@ Similarly to the `insert` command, we can also use the `update` command to chang
 
 ```
 > open rustfmt.toml
-─────────┬──────
- edition │ 2018 
-─────────┴──────
+───┬─────────
+ # │ edition 
+───┼─────────
+ 0 │    2018 
+───┴─────────
 ```
 
 And now, let's update the edition to point at the next edition we hope to support:
 
 ```
 > open rustfmt.toml | update edition 2021
-─────────┬──────
- edition │ 2021 
-─────────┴──────
+───┬─────────
+ # │ edition 
+───┼─────────
+ 0 │    2021 
+───┴─────────
 ```
 
 ### Incrementing values
@@ -233,13 +243,17 @@ There's one more command that Nu supports that will help us work with numbers an
 
 ```
 > open rustfmt.toml
-─────────┬──────
- edition │ 2018 
-─────────┴──────
+───┬─────────
+ # │ edition 
+───┼─────────
+ 0 │    2018 
+───┴─────────
 > open rustfmt.toml | inc edition
-─────────┬──────
- edition │ 2019 
-─────────┴──────
+───┬─────────
+ # │ edition 
+───┼─────────
+ 0 │    2019 
+───┴─────────
 ```
 
 Because the value in "edition" is a number, we can use `inc` to update it.  Where `inc` really shines is working with versions:
